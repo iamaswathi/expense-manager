@@ -33,16 +33,16 @@ export default function TransactionsList() {
 
 
     return (
-        <div className="p-4 space-y-12">
+        <div className="">
             {Object.entries(grouped)
                 .sort((a, b) => b[1].monthDate.getTime() - a[1].monthDate.getTime())
                 .map(([monthKey, { totalDebit, monthDate, dates }]) => (
                     <div key={monthKey}>
-                        <div className="flex justify-between items-center px-4">
-                        <h2 className="text-xl font-bold text-gray-800 mb-4 pb-1">
+                        <div className="flex justify-between items-center px-4 py-4">
+                        <h2 className="text-xl text-gray-800">
                             {monthKey} 
                         </h2>
-                        <span className="font-semibold">${totalDebit.toFixed(2)}</span>
+                        <span className="">${totalDebit.toFixed(2)}</span>
                         </div>
 
                         {Object.entries(dates)
