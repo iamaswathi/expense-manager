@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Transaction } from '../types';
-import { fetchTransactionsList } from '../services/dataService';
-import { groupByDate } from '../utils/groupByDate';
-import { getCategoryIcon } from '../utils/getCategoryIcons';
-import { groupByMonthAndDate } from '../utils/groupByMonthAndDate';
+import { Transaction } from '../../types';
+import { fetchTransactionsList } from '../../services/dataService';
+import { getCategoryIcon } from '../../utils/getCategoryIcons';
+import { groupByMonthAndDate } from '../../utils/groupByMonthAndDate';
 
 export default function TransactionsList() {
     const [transactionData, setTransactionData] = useState<Transaction[]>([]);
@@ -28,9 +27,7 @@ export default function TransactionsList() {
     if (loading) return <p className="text-center text-gray-500">Loading transactions...</p>;
     if (error) return <p className="text-center text-red-500">{error}</p>;
 
-    // const grouped = groupByDate(transactionData);
     const grouped = groupByMonthAndDate(transactionData);
-
 
     return (
         <div className="">

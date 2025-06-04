@@ -3,11 +3,9 @@ import {
     Briefcase,
     Home,
     Train,
-    CreditCard,
     ShoppingCart,
     PiggyBank,
     Heart,
-    Bus,
     HelpCircle,
   } from 'lucide-react';
 
