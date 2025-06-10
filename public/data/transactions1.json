@@ -1,0 +1,44 @@
+[
+    { 
+        "id": "1",
+        "name":"Gozleme",
+        "category": "Food",
+        "date": "2023-09-28",
+        "time": "7:55pm",
+        "description": "gozleme.com.au",
+        "debit": "50" 
+    },
+    { 
+        "id": "2",
+        "name": "Company",
+        "category": "Salary",
+        "date": "2023-10-01",
+        "time": "10:05am",
+        "description": "ABC Pvt Ltd",
+        "credit": "2000" },
+    { 
+        "id": "3",
+        "name":"RayWhites",
+        "category":"Rent",
+        "date": "2023-10-02",
+        "time": "4:08pm",
+        "debit": "250"
+    },
+    { 
+        "id": "4",
+        "name":"A2B Geelong",
+        "category":"Food",
+        "date": "2023-10-11",
+        "time": "9:32am",
+        "description": "a2b payment",
+        "debit": "20"
+    },
+    { 
+        "id": "6",
+        "name":"VIC Roads",
+        "category": "Transport",
+        "date": "2023-10-11",
+        "time": "8:00am",
+        "debit": "3.75"
+    }
+]

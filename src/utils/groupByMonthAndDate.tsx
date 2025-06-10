@@ -1,4 +1,5 @@
-import { Transaction } from "../types"
+import { Transaction } from "./interface/transactionInterface";
+
 
 type MonthDateGroupedTransactions = {
     [monthKey: string]: {
@@ -9,22 +10,20 @@ type MonthDateGroupedTransactions = {
                 date: Date;
                 transactions: Transaction[];
                 total: number;
-                isCredit: Boolean;
+                isCredit: boolean;
             };
         };
     };
 };
 
-const getMonthKey = (dateStr: string): [string, Date] => {
-    const date = new Date(dateStr);
+const getMonthKey = (date: Date): [string, Date] => {
     const key = date.toLocaleDateString('en-AU', {
         year: 'numeric',
         month: 'short'});
     return [key, new Date(date.getFullYear(), date.getMonth())];
 }
 
-const getDateKey = (dateStr: string): [string, Date] => {
-    const date = new Date(dateStr);
+const getDateKey = (date: Date): [string, Date] => {
     const key = date.toLocaleDateString('en-AU', { 
         weekday: 'short',
         day: 'numeric',
@@ -35,22 +34,33 @@ const getDateKey = (dateStr: string): [string, Date] => {
 
 export const groupByMonthAndDate = (transactions: Transaction[]): MonthDateGroupedTransactions => {
     return transactions.reduce((acc: MonthDateGroupedTransactions, transaction) => {
-        const [monthKey, monthDate] = getMonthKey(transaction.date);
-        const [dateKey, fullDate] = getDateKey(transaction.date);
-        const amount = parseFloat(transaction.credit || transaction.debit || '0');
-        const isCredit = !!transaction.credit;
+        const rawDate = new Date(transaction.attributes.createdAt);
+        const [monthKey, monthDate] = getMonthKey(rawDate);
+        const [dateKey, fullDate] = getDateKey(rawDate);
+        const amount = parseFloat(removeCreditDebitSign(transaction.attributes.amount.value) || '0');
+        const isCredit = findCreditOrDebit(transaction.attributes.amount.value);
+        console.log(isCredit);
         if(!acc[monthKey]) {
             acc[monthKey] = { monthDate, totalDebit: 0, dates: {} };
         }
         if(!acc[monthKey].dates[dateKey]) {
-            acc[monthKey].dates[dateKey] = { date: fullDate, transactions: [], total: 0, isCredit };
+            acc[monthKey].dates[dateKey] = { date: fullDate, transactions: [], total: 0, isCredit};
         }
         acc[monthKey].dates[dateKey].transactions.push(transaction);
         acc[monthKey].dates[dateKey].total += amount;
         acc[monthKey].dates[dateKey].isCredit = isCredit;
-
+        
         if(!isCredit) acc[monthKey].totalDebit += amount;
         return acc;
 
     }, {});
 };
+
+const findCreditOrDebit = (transactionValue: string) => {
+    return (transactionValue.startsWith('+'));
+}
+
+const removeCreditDebitSign = (transactionValue: string) => {
+    return transactionValue.slice(1);
+}
+

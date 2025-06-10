@@ -11,7 +11,8 @@ export const fetchTransactionsList = async () => {
       }
   
       const data = await response.json();
-      return data;
+      console.log("Returned value - ",data.data);
+      return data.data;
     } catch (error) {
       console.error('Fetching data failed:', error);
       return [];

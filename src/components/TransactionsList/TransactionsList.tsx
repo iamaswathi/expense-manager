@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Transaction } from '../../types';
 import { fetchTransactionsList } from '../../services/dataService';
 import { getCategoryIcon } from '../../utils/getCategoryIcons';
 import { groupByMonthAndDate } from '../../utils/groupByMonthAndDate';
+import { Transaction } from '../../utils/interface/transactionInterface';
 
 export default function TransactionsList() {
     const [transactionData, setTransactionData] = useState<Transaction[]>([]);
@@ -13,6 +13,7 @@ export default function TransactionsList() {
         const loadData = async () => {
             try {
                 const data = await fetchTransactionsList();
+                console.log(data);
                 setTransactionData(data);
             } catch (err) {
                 setError('Failed to load transactions.');
@@ -28,6 +29,17 @@ export default function TransactionsList() {
     if (error) return <p className="text-center text-red-500">{error}</p>;
 
     const grouped = groupByMonthAndDate(transactionData);
+
+    // function removeCreditDebitSign(arg0: number) {
+    //     throw new Error('Function not implemented.');
+    // }
+    const removeCreditDebitSign = (transactionValue: string) => {
+        return transactionValue.slice(1);
+    }
+    const getTimeFromDateString = (dateStr: string) => {
+        const date = new Date(dateStr);
+        return date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+    }
 
     return (
         <div className="">
@@ -54,27 +66,21 @@ export default function TransactionsList() {
                                     </div>
                                     <table className="w-full bg-white">
                                         <thead className="bg-gray-100">
-                                            {/* <tr>
-                  <th className="px-4 py-2 text-left border-b">Description</th>
-                  <th className="px-4 py-2 text-left border-b">Category</th>
-                  <th className="px-4 py-2 text-right border-b">Amount</th>
-                </tr> */}
                                         </thead>
                                         <tbody>
                                             {transactions.map((item) => {
-                                                const amount = parseFloat(item.debit || item.credit || "0");
-                                                const isCredit = Boolean(item.credit);
-                                                const amountFormatted = `${isCredit ? "+" : ""}$${amount.toFixed(2)}`;
-                                                const amountColor = isCredit ? "text-green-600" : "text-gray-600";
+                                                const amount = parseFloat(removeCreditDebitSign(item.attributes.amount.value)).toFixed(2);
+                                                const amountFormatted = `${item.attributes.amount.value.startsWith('+') ? "+" : ""}$${amount}`;
+                                                const amountColor = item.attributes.amount.value.startsWith('+') ? "text-green-600" : "text-gray-600";
 
                                                 return (
                                                     <tr key={item.id} className="hover:bg-gray-50">
                                                         <td className="px-4 py-2 border-b">
                                                             <div className="flex items-center gap-2">
-                                                                <span className="w-5 h-5 text-blue-500">{getCategoryIcon(item.category)}</span>
-                                                                <span className="">{item.name}<br />
-                                                                    <span className='text-gray-400'>{item.time}</span>
-                                                                    {item.description ? <span className='text-gray-400'>, {item.description}</span> : null}
+                                                                <span className="w-5 h-5 text-blue-500">{getCategoryIcon('food')}</span>
+                                                                <span className="">{item.attributes.description}<br />
+                                                                    <span className='text-gray-400'>{getTimeFromDateString(item.attributes.createdAt)}</span>
+                                                                    {item.attributes.message ? <span className='text-gray-400'>, {item.attributes.message}</span> : <span className='text-gray-400'>, {item.attributes.performingCustomer.displayName}</span>}
                                                                 </span>
                                                             </div>
                                                         </td>
