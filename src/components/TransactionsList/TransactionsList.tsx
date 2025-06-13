@@ -29,10 +29,7 @@ export default function TransactionsList() {
     if (error) return <p className="text-center text-red-500">{error}</p>;
 
     const grouped = groupByMonthAndDate(transactionData);
-
-    // function removeCreditDebitSign(arg0: number) {
-    //     throw new Error('Function not implemented.');
-    // }
+    
     const removeCreditDebitSign = (transactionValue: string) => {
         return transactionValue.slice(1);
     }
@@ -42,49 +39,54 @@ export default function TransactionsList() {
     }
 
     return (
-        <div className="">
+        <div className=" font-custom">
             {Object.entries(grouped)
                 .sort((a, b) => b[1].monthDate.getTime() - a[1].monthDate.getTime())
                 .map(([monthKey, { totalDebit, monthDate, dates }]) => (
-                    <div key={monthKey}>
+                    <div className="border-b-2" key={monthKey}>
                         <div className="flex justify-between items-center px-4 py-4">
-                        <h2 className="text-xl text-gray-800">
+                        <p className="text-lg text-primary">
                             {monthKey} 
-                        </h2>
+                        </p>
                         <span className="">${totalDebit.toFixed(2)}</span>
                         </div>
 
                         {Object.entries(dates)
                             .sort((a, b) => b[1].date.getTime() - a[1].date.getTime())
                             .map(([dateKey, { transactions, total, isCredit }]) => (
-                                <div key={dateKey} className="">
-                                    <div className="flex justify-between items-center border-b bg-gray-100 px-4 py-2">
-                                        <h3 className="text-md text-gray-700">{dateKey}</h3>
+                                <div key={dateKey} className="border-none">
+                                    <div className="flex justify-between items-center border-none bg-highlight px-4 py-2">
+                                        <p className="text-xs text-secondary">{dateKey}</p>
                                         {/* <span className={`font-semibold ${isCredit ? 'text-green-600' : 'text-red-600'}`}>
                                             {isCredit ? `` : `${Math.abs(total).toFixed(2)}`}
                                         </span> */}
                                     </div>
-                                    <table className="w-full bg-white">
-                                        <thead className="bg-gray-100">
+                                    <table className="w-full bg-white font-custom table-auto border-collapse">
+                                        <thead className="bg-highlight">
                                         </thead>
                                         <tbody>
-                                            {transactions.map((item) => {
+                                            {transactions.map((item, index) => {
+                                                const isLastRow = index === transactions.length - 1;
                                                 const amount = parseFloat(removeCreditDebitSign(item.attributes.amount.value)).toFixed(2);
                                                 const amountFormatted = `${item.attributes.amount.value.startsWith('+') ? "+" : ""}$${amount}`;
-                                                const amountColor = item.attributes.amount.value.startsWith('+') ? "text-green-600" : "text-gray-600";
+                                                const amountColor = item.attributes.amount.value.startsWith('+') ? "text-tertiary" : "text-primary";
 
                                                 return (
-                                                    <tr key={item.id} className="hover:bg-gray-50">
-                                                        <td className="px-4 py-2 border-b">
+                                                    <tr key={item.id} className="hover:bg-highlight">
+                                                        <td className="text-primary border-none">
+                                                        <div className="text-primary flex items-center justify-center h-full w-full">
+                                                            {getCategoryIcon(item.relationships.tags.data[0].id)}
+                                                        </div>    
+                                                        </td>
+                                                        <td className={`px-4 py-2 ${isLastRow ? 'border-none' : 'border-b'}`}>
                                                             <div className="flex items-center gap-2">
-                                                                <span className="w-5 h-5 text-blue-500">{getCategoryIcon('food')}</span>
-                                                                <span className="">{item.attributes.description}<br />
-                                                                    <span className='text-gray-400'>{getTimeFromDateString(item.attributes.createdAt)}</span>
-                                                                    {item.attributes.message ? <span className='text-gray-400'>, {item.attributes.message}</span> : <span className='text-gray-400'>, {item.attributes.performingCustomer.displayName}</span>}
+                                                                <span className="text-primary">{item.attributes.description}<br />
+                                                                    <span className="text-xs text-secondary">{getTimeFromDateString(item.attributes.createdAt)}</span>
+                                                                    {item.attributes.message ? <span className="text-xs text-secondary">, {item.attributes.message}</span> : <span className='text-gray-400'>, {item.attributes.performingCustomer.displayName}</span>}
                                                                 </span>
                                                             </div>
                                                         </td>
-                                                        <td className={`px-4 py-2 border-b text-right font-medium ${amountColor}`}>
+                                                        <td className={`px-4 py-2 text-right ${amountColor} ${isLastRow ? 'border-none' : 'border-b'}`}>
                                                             {amountFormatted}
                                                         </td>
                                                     </tr>

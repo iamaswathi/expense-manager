@@ -10,7 +10,7 @@ export default function App() {
     <ExpenseProvider>
       <div className="min-h-screen">
         <Header />
-        <main className="p-4">
+        <main className="p-4 font-custom">
           <AccountBalance available={1299.38} spendable={650.44}/>
           <TransactionsList />
         </main>

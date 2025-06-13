@@ -7,25 +7,31 @@ import {
     PiggyBank,
     Heart,
     HelpCircle,
+    Drama,
+    ShoppingBasket,
   } from 'lucide-react';
 
   export const getCategoryIcon = (category: string) => {
     switch(category.toLowerCase()){
         case 'salary': 
-            return <Briefcase className="w-5 h-5 text-orange-500" />;
+            return <Briefcase/>;
         case 'food':
-            return <Utensils className="w-5 h-5 text-orange-500" />;
+            return <Utensils/>;
         case 'rent': 
-            return <Home className="w-5 h-5 text-orange-500" />;
+            return <Home/>;
         case 'transport':
-            return <Train className="w-5 h-5 text-orange-500" />;
+            return <Train/>;
         case 'shopping': 
-            return <ShoppingCart className="w-5 h-5 text-orange-500" />;
+            return <ShoppingCart/>;
+        case 'entertainment': 
+            return <Drama/>;
+        case 'grocery': 
+            return <ShoppingBasket/>;
         case 'savings':
-            return <PiggyBank className="w-5 h-5 text-orange-500" />;
+            return <PiggyBank/>;
         case 'health': 
-            return <Heart className="w-5 h-5 text-orange-500" />;
+            return <Heart/>;
         default:
-            return <HelpCircle className="w-5 h-5 text-orange-500" />;
+            return <HelpCircle/>;
     }
   };

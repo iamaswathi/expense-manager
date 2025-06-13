@@ -54,7 +54,347 @@
                 "data": [
                   {
                     "type": "tags",
-                    "id": "Pizza Night"
+                    "id": "Rent"
+                  }
+                ],
+                "links": {
+                  "self": "https://api.up.com.au/api/v1/transactions/09d0428f-2d7e-499a-8f61-e27a04c5eb43/relationships/tags"
+                }
+              },
+              "attachment": {
+                "data": null
+              }
+            },
+            "links": {
+              "self": "https://api.up.com.au/api/v1/transactions/09d0428f-2d7e-499a-8f61-e27a04c5eb43"
+            }
+          },{
+            "type": "transactions",
+            "id": "09q0428f-2d7e-499a-8f61-e27a04c67b43",
+            "attributes": {
+              "status": "SETTLED",
+              "rawText": null,
+              "description": "Netflix",
+              "message": "Monthly subscription",
+              "isCategorizable": true,
+              "holdInfo": null,
+              "roundUp": null,
+              "cashback": null,
+              "amount": {
+                "currencyCode": "AUD",
+                "value": "-10.00",
+                "valueInBaseUnits": 5998
+              },
+              "foreignAmount": null,
+              "cardPurchaseMethod": null,
+              "settledAt": "2025-06-10T07:11:11+10:00",
+              "createdAt": "2025-06-10T07:11:11+10:00",
+              "transactionType": null,
+              "note": null,
+              "performingCustomer": {
+                "displayName": "Netflix.com"
+              },
+              "deepLinkURL": "up://transaction/VHJhbnNhY3Rpb24tMTA4"
+            },
+            "relationships": {
+              "account": {
+                "data": {
+                  "type": "accounts",
+                  "id": "ecaf05a6-4eaa-46e7-b587-dff2ba500b0a"
+                },
+                "links": {
+                  "related": "https://api.up.com.au/api/v1/accounts/ecaf05a6-4eaa-46e7-b587-dff2ba500b0a"
+                }
+              },
+              "transferAccount": {
+                "data": null
+              },
+              "category": {
+                "data": null,
+                "links": {
+                  "self": "https://api.up.com.au/api/v1/transactions/09d0428f-2d7e-499a-8f61-e27a04c5eb43/relationships/category"
+                }
+              },
+              "parentCategory": {
+                "data": null
+              },
+              "tags": {
+                "data": [
+                  {
+                    "type": "tags",
+                    "id": "Entertainment"
+                  }
+                ],
+                "links": {
+                  "self": "https://api.up.com.au/api/v1/transactions/09d0428f-2d7e-499a-8f61-e27a04c5eb43/relationships/tags"
+                }
+              },
+              "attachment": {
+                "data": null
+              }
+            },
+            "links": {
+              "self": "https://api.up.com.au/api/v1/transactions/09d0428f-2d7e-499a-8f61-e27a04c5eb43"
+            }
+          },{
+            "type": "transactions",
+            "id": "09d0428f-2d7e-499a-2f61-e27a04c67b43",
+            "attributes": {
+              "status": "SETTLED",
+              "rawText": null,
+              "description": "Oncore",
+              "message": "Salary Credited",
+              "isCategorizable": true,
+              "holdInfo": null,
+              "roundUp": null,
+              "cashback": null,
+              "amount": {
+                "currencyCode": "AUD",
+                "value": "+3500.00",
+                "valueInBaseUnits": 5998
+              },
+              "foreignAmount": null,
+              "cardPurchaseMethod": null,
+              "settledAt": "2025-06-02T12:10:31+10:00",
+              "createdAt": "2025-06-02T12:10:31+10:00",
+              "transactionType": null,
+              "note": null,
+              "performingCustomer": {
+                "displayName": "Oncore"
+              },
+              "deepLinkURL": "up://transaction/VHJhbnNhY3Rpb24tMTA4"
+            },
+            "relationships": {
+              "account": {
+                "data": {
+                  "type": "accounts",
+                  "id": "ecaf05a6-4eaa-46e7-b587-dff2ba500b0a"
+                },
+                "links": {
+                  "related": "https://api.up.com.au/api/v1/accounts/ecaf05a6-4eaa-46e7-b587-dff2ba500b0a"
+                }
+              },
+              "transferAccount": {
+                "data": null
+              },
+              "category": {
+                "data": null,
+                "links": {
+                  "self": "https://api.up.com.au/api/v1/transactions/09d0428f-2d7e-499a-8f61-e27a04c5eb43/relationships/category"
+                }
+              },
+              "parentCategory": {
+                "data": null
+              },
+              "tags": {
+                "data": [
+                  {
+                    "type": "tags",
+                    "id": "Salary"
+                  }
+                ],
+                "links": {
+                  "self": "https://api.up.com.au/api/v1/transactions/09d0428f-2d7e-499a-8f61-e27a04c5eb43/relationships/tags"
+                }
+              },
+              "attachment": {
+                "data": null
+              }
+            },
+            "links": {
+              "self": "https://api.up.com.au/api/v1/transactions/09d0428f-2d7e-499a-8f61-e27a04c5eb43"
+            }
+          },{
+            "type": "transactions",
+            "id": "09d0428f-2d7e-5342-8f61-e27a04c67b43",
+            "attributes": {
+              "status": "SETTLED",
+              "rawText": null,
+              "description": "Vision Cinema",
+              "message": "Movie night",
+              "isCategorizable": true,
+              "holdInfo": null,
+              "roundUp": null,
+              "cashback": null,
+              "amount": {
+                "currencyCode": "AUD",
+                "value": "-15.00",
+                "valueInBaseUnits": 5998
+              },
+              "foreignAmount": null,
+              "cardPurchaseMethod": null,
+              "settledAt": "2025-04-26T20:10:31+10:00",
+              "createdAt": "2025-04-26T20:10:31+10:00",
+              "transactionType": null,
+              "note": null,
+              "performingCustomer": {
+                "displayName": "Vision Cinema"
+              },
+              "deepLinkURL": "up://transaction/VHJhbnNhY3Rpb24tMTA4"
+            },
+            "relationships": {
+              "account": {
+                "data": {
+                  "type": "accounts",
+                  "id": "ecaf05a6-4eaa-46e7-b587-dff2ba500b0a"
+                },
+                "links": {
+                  "related": "https://api.up.com.au/api/v1/accounts/ecaf05a6-4eaa-46e7-b587-dff2ba500b0a"
+                }
+              },
+              "transferAccount": {
+                "data": null
+              },
+              "category": {
+                "data": null,
+                "links": {
+                  "self": "https://api.up.com.au/api/v1/transactions/09d0428f-2d7e-499a-8f61-e27a04c5eb43/relationships/category"
+                }
+              },
+              "parentCategory": {
+                "data": null
+              },
+              "tags": {
+                "data": [
+                  {
+                    "type": "tags",
+                    "id": "Entertainment"
+                  }
+                ],
+                "links": {
+                  "self": "https://api.up.com.au/api/v1/transactions/09d0428f-2d7e-499a-8f61-e27a04c5eb43/relationships/tags"
+                }
+              },
+              "attachment": {
+                "data": null
+              }
+            },
+            "links": {
+              "self": "https://api.up.com.au/api/v1/transactions/09d0428f-2d7e-499a-8f61-e27a04c5eb43"
+            }
+          },{
+            "type": "transactions",
+            "id": "09qq0428f-2d7e-499a-8f61-e27a04c67b43",
+            "attributes": {
+              "status": "SETTLED",
+              "rawText": null,
+              "description": "Grocey",
+              "message": "Fruit Schack",
+              "isCategorizable": true,
+              "holdInfo": null,
+              "roundUp": null,
+              "cashback": null,
+              "amount": {
+                "currencyCode": "AUD",
+                "value": "-32.00",
+                "valueInBaseUnits": 5998
+              },
+              "foreignAmount": null,
+              "cardPurchaseMethod": null,
+              "settledAt": "2025-05-24T08:09:31+10:00",
+              "createdAt": "2025-05-24T08:09:31+10:00",
+              "transactionType": null,
+              "note": null,
+              "performingCustomer": {
+                "displayName": "Joe"
+              },
+              "deepLinkURL": "up://transaction/VHJhbnNhY3Rpb24tMTA4"
+            },
+            "relationships": {
+              "account": {
+                "data": {
+                  "type": "accounts",
+                  "id": "ecaf05a6-4eaa-46e7-b587-dff2ba500b0a"
+                },
+                "links": {
+                  "related": "https://api.up.com.au/api/v1/accounts/ecaf05a6-4eaa-46e7-b587-dff2ba500b0a"
+                }
+              },
+              "transferAccount": {
+                "data": null
+              },
+              "category": {
+                "data": null,
+                "links": {
+                  "self": "https://api.up.com.au/api/v1/transactions/09d0428f-2d7e-499a-8f61-e27a04c5eb43/relationships/category"
+                }
+              },
+              "parentCategory": {
+                "data": null
+              },
+              "tags": {
+                "data": [
+                  {
+                    "type": "tags",
+                    "id": "Grocery"
+                  }
+                ],
+                "links": {
+                  "self": "https://api.up.com.au/api/v1/transactions/09d0428f-2d7e-499a-8f61-e27a04c5eb43/relationships/tags"
+                }
+              },
+              "attachment": {
+                "data": null
+              }
+            },
+            "links": {
+              "self": "https://api.up.com.au/api/v1/transactions/09d0428f-2d7e-499a-8f61-e27a04c5eb43"
+            }
+          },{
+            "type": "transactions",
+            "id": "09d0428e-2d7e-499a-8f61-e27a04c67b43",
+            "attributes": {
+              "status": "PENDING",
+              "rawText": null,
+              "description": "Aldi",
+              "message": "Grocery",
+              "isCategorizable": true,
+              "holdInfo": null,
+              "roundUp": null,
+              "cashback": null,
+              "amount": {
+                "currencyCode": "AUD",
+                "value": "-65.00",
+                "valueInBaseUnits": 5998
+              },
+              "foreignAmount": null,
+              "cardPurchaseMethod": null,
+              "settledAt": "2025-05-15T13:09:22+10:00",
+              "createdAt": "2025-05-15T13:09:22+10:00",
+              "transactionType": null,
+              "note": null,
+              "performingCustomer": {
+                "displayName": "Aldi"
+              },
+              "deepLinkURL": "up://transaction/VHJhbnNhY3Rpb24tMTA4"
+            },
+            "relationships": {
+              "account": {
+                "data": {
+                  "type": "accounts",
+                  "id": "ecaf05a6-4eaa-46e7-b587-dff2ba500b0a"
+                },
+                "links": {
+                  "related": "https://api.up.com.au/api/v1/accounts/ecaf05a6-4eaa-46e7-b587-dff2ba500b0a"
+                }
+              },
+              "transferAccount": {
+                "data": null
+              },
+              "category": {
+                "data": null,
+                "links": {
+                  "self": "https://api.up.com.au/api/v1/transactions/09d0428f-2d7e-499a-8f61-e27a04c5eb43/relationships/category"
+                }
+              },
+              "parentCategory": {
+                "data": null
+              },
+              "tags": {
+                "data": [
+                  {
+                    "type": "tags",
+                    "id": "Grocery"
                   }
                 ],
                 "links": {
@@ -122,7 +462,7 @@
             "data": [
               {
                 "type": "tags",
-                "id": "Pizza Night"
+                "id": "Food"
               }
             ],
             "links": {
@@ -190,7 +530,7 @@
             "data": [
               {
                 "type": "tags",
-                "id": "Pizza Night"
+                "id": "Food"
               }
             ],
             "links": {
