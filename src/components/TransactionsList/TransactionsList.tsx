@@ -3,32 +3,22 @@ import { fetchTransactionsList } from '../../services/dataService';
 import { getCategoryIcon } from '../../utils/getCategoryIcons';
 import { groupByMonthAndDate } from '../../utils/groupByMonthAndDate';
 import { Transaction } from '../../utils/interface/transactionInterface';
+import { useAppDispatch, useAppSelector } from '../../state/hooks';
+import { loadTransactions } from '../../state/transactions/transactionsSlice';
 
 export default function TransactionsList() {
-    const [transactionData, setTransactionData] = useState<Transaction[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+
+    const dispatch =useAppDispatch();
+    const transactionsList = useAppSelector((state) => state.transctions.transactionsList);
+    const status = useAppSelector((state) => state.transctions.status);
 
     useEffect(() => {
-        const loadData = async () => {
-            try {
-                const data = await fetchTransactionsList();
-                console.log(data);
-                setTransactionData(data);
-            } catch (err) {
-                setError('Failed to load transactions.');
-            } finally {
-                setLoading(false);
-            }
-        };
+        dispatch(loadTransactions());
+    }, [dispatch]);
 
-        loadData();
-    }, []);
+    if(status === 'loading') return <div>Loading ...</div>
 
-    if (loading) return <p className="text-center text-gray-500">Loading transactions...</p>;
-    if (error) return <p className="text-center text-red-500">{error}</p>;
-
-    const grouped = groupByMonthAndDate(transactionData);
+    const grouped = groupByMonthAndDate(transactionsList);
     
     const removeCreditDebitSign = (transactionValue: string) => {
         return transactionValue.slice(1);
