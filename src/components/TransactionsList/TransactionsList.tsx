@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../state/store';
 import { fetchTransactionsList } from '../../services/dataService';
 import TransactionDetail from '../TransactionDetail/TransactionDetail';
+import { findIfCredit, getTimeFromDateString, removeCreditDebitSign } from '../../utils/utilities';
 
 export default function TransactionsList() {
 
@@ -21,14 +22,6 @@ export default function TransactionsList() {
     if (status === 'loading') return <div>Loading ...</div>
 
     const grouped = groupByMonthAndDate(transactions);
-
-    const removeCreditDebitSign = (transactionValue: string) => {
-        return transactionValue.slice(1);
-    }
-    const getTimeFromDateString = (dateStr: string) => {
-        const date = new Date(dateStr);
-        return date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-    }
 
     return (
         <div className="font-custom">
@@ -57,9 +50,10 @@ export default function TransactionsList() {
                                             {transactions.map((item, index) => {
                                                 const isLastRow = index === transactions.length - 1;
                                                 const amount = parseFloat(removeCreditDebitSign(item.attributes.amount.value)).toFixed(2);
-                                                const amountFormatted = `${item.attributes.amount.value.startsWith('+') ? "+" : ""}$${amount}`;
-                                                const amountColor = item.attributes.amount.value.startsWith('+') ? "text-tertiary" : "text-primary";
-
+                                                const isCredit = findIfCredit(item.attributes.amount.value);
+                                                const amountColor = isCredit ? "text-tertiary" : "text-primary";
+                                                const amountFormatted = `${isCredit ? "+" : ""}$${amount}`;
+                                                
                                                 return (
                                                     <tr key={item.id} className="hover:bg-highlight" onClick={() => dispatch(setSelectedTransaction(item.id))}>
                                                         <td className="text-primary border-none">

@@ -1,4 +1,5 @@
 import { Transaction } from "./interface/transactionInterface";
+import { findIfCredit, removeCreditDebitSign } from "./utilities";
 
 
 type MonthDateGroupedTransactions = {
@@ -38,8 +39,7 @@ export const groupByMonthAndDate = (transactions: Transaction[]): MonthDateGroup
         const [monthKey, monthDate] = getMonthKey(rawDate);
         const [dateKey, fullDate] = getDateKey(rawDate);
         const amount = parseFloat(removeCreditDebitSign(transaction.attributes.amount.value) || '0');
-        const isCredit = findCreditOrDebit(transaction.attributes.amount.value);
-        console.log(isCredit);
+        const isCredit = findIfCredit(transaction.attributes.amount.value);
         if(!acc[monthKey]) {
             acc[monthKey] = { monthDate, totalDebit: 0, dates: {} };
         }
@@ -55,12 +55,3 @@ export const groupByMonthAndDate = (transactions: Transaction[]): MonthDateGroup
 
     }, {});
 };
-
-const findCreditOrDebit = (transactionValue: string) => {
-    return (transactionValue.startsWith('+'));
-}
-
-const removeCreditDebitSign = (transactionValue: string) => {
-    return transactionValue.slice(1);
-}
-
