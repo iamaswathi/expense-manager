@@ -1,10 +1,11 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TransactionsState } from "../../utils/interface/transactionState";
 import { fetchTransactionsList } from "../../services/dataService";
+import { Transaction } from "../../utils/interface/transactionInterface";
 
 const initialState: TransactionsState = {
     transactionsList: [],
-    selectedTransaction: null,
+    selectedTransactionId: null,
     status: 'idle',
     error: null,
 }
@@ -21,13 +22,15 @@ const transactionSlice = createSlice({
     name: 'transactionsList',
     initialState,
     reducers: {
-        // setTransactions(state, action: PayloadAction<Transaction[]>) {
-        //     state.transactions = action.payload;
-        // },
-        selectTransaction(state, action: PayloadAction<string>) {
-            const tx = state.transactionsList.find(t=>t.id === action.payload) || null;
-            state.selectedTransaction = tx;
+        setTransactions(state, action: PayloadAction<Transaction[]>) {
+            state.transactionsList = action.payload;
         },
+        setSelectedTransaction(state, action: PayloadAction<string>) {
+            state.selectedTransactionId = action.payload;
+        },
+        clearSelectedTransaction(state) {
+            state.selectedTransactionId = null;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -44,5 +47,5 @@ const transactionSlice = createSlice({
     }
 });
 
-export const {selectTransaction} = transactionSlice.actions;
+export const {setTransactions, setSelectedTransaction, clearSelectedTransaction} = transactionSlice.actions;
 export default transactionSlice.reducer;

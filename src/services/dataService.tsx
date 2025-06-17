@@ -25,23 +25,23 @@ export const fetchTransactionsList =  async (): Promise<Transaction[]> => {
     }
   };
 
-  export const fetchTransactionById = async (): Promise<Transaction | null> => {
-    try {
-      const response = await fetch('/data/transaction.json', {
-        headers: {
-          'Cache-Control': 'no-cache', // Optional: to avoid 304 caching
-        },
-      });
+  // export const fetchTransactionById = async (): Promise<Transaction | null> => {
+  //   try {
+  //     const response = await fetch('/data/transaction.json', {
+  //       headers: {
+  //         'Cache-Control': 'no-cache', // Optional: to avoid 304 caching
+  //       },
+  //     });
   
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.statusText}`);
-      }
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! status: ${response.statusText}`);
+  //     }
   
-      const data = await response.json();
-      console.log("Returned value - ",data.data);
-      return data.data;
-    } catch (error) {
-      console.error('Fetching data failed:', error);
-      return null;
-    }
-  };
+  //     const data = await response.json();
+  //     console.log("Returned value - ",data.data);
+  //     return data.data;
+  //   } catch (error) {
+  //     console.error('Fetching data failed:', error);
+  //     return null;
+  //   }
+  // };
