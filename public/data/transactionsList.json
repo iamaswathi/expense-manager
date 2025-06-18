@@ -366,7 +366,7 @@
         "cardPurchaseMethod": null,
         "settledAt": "2025-05-15T13:09:22+10:00",
         "createdAt": "2025-05-15T13:09:22+10:00",
-        "transactionType": null,
+        "transactionType": "BPAY",
         "note": null,
         "performingCustomer": {
           "displayName": "Aldi"

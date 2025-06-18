@@ -25,11 +25,11 @@ const TransactionDetail = () => {
     const amountFormatted = `${amount.value.startsWith('+') ? "+" : ""}$${txnAmount}`;
     const isCredit = findIfCredit(transaction.attributes.amount.value);
     const amountColor = isCredit ? "text-tertiary" : "text-primary";
-        
+
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-            <div className="bg-white border rounded shadow-md px-2 py-2 w-80 relative font-sans">
+            <div className="bg-white border rounded shadow-md px-2 py-2 w-96 relative font-sans">
                 <button
                     className="absolute top-1 right-2 text-gray-500 text-lg"
                     onClick={() => dispatch(clearSelectedTransaction())}
@@ -37,11 +37,11 @@ const TransactionDetail = () => {
                     ×
                 </button>
 
-                <div className="border-b px-4 pt-4 pb-2 flex justify-between">
-                    <div>{getCategoryIcon(transaction.relationships.tags.data[0].id)}</div>
-                    <div>
-                        <div className="font-semibold text-sm">{description || 'Merchant Name'}</div>
-                        <div className="text-xs">{message || 'Description or note'}</div>
+                <div className="border-b px-4 py-4 flex justify-between">
+                    <div className="flex justify-between">
+                        <div>{getCategoryIcon(transaction.relationships.tags.data[0].id)}</div>
+                        <div className="px-4"><div className="font-semibold text-sm">{description || 'Merchant Name'}</div>
+                        <div className="text-xs">{message || 'Description or note'}</div></div>
                     </div>
                     <div className={`text-sm font-bold ${amountColor} `}>{amountFormatted}</div>
                 </div>
@@ -49,9 +49,8 @@ const TransactionDetail = () => {
                 <table className="w-full text-sm">
                     <tbody>
                         <tr className="border-none">
-                            <td className="px-4 py-2 text-left text-gray-600">{isCredit ? 'Received': 'Paid'}</td>
+                            <td className="px-4 py-2 text-left text-gray-600">{isCredit ? 'Received' : 'Paid'}</td>
                             <td className="px-4 py-2 text-right">
-
                                 {getDateDay(createdAt)} {getTimeFromDateString(createdAt)}
                             </td>
                         </tr>
