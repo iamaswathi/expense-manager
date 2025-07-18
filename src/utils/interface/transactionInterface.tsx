@@ -6,9 +6,20 @@ export interface UpApiResponse {
     };
 }
 
+export interface Account {
+    id: string;
+    name: string;
+    last4digits: string;
+    institution: string;
+    type: 'checking' | 'savings' | 'credit';
+    bankLogo?: string;
+    bankAltText?: string;
+}
+
 export interface Transaction {
     type: string;
     id: string;
+    accountId: string;
     attributes: TransactionAttributes;
     relationships: TransactionRelationships;
     links: {
@@ -60,7 +71,7 @@ export interface TransactionRelationships {
             type: string;
             id: string;
         };
-        links:{
+        links: {
             related: string;
         };
     };
@@ -73,11 +84,11 @@ export interface TransactionRelationships {
             self: string;
         };
     };
-    parentCategory : {
+    parentCategory: {
         data: null;
     };
     tags: {
-        data:{
+        data: {
             type: string;
             id: string;
         }[];
@@ -128,10 +139,45 @@ export interface TransactionCategories {
     children: {
         data: any[];
         links: {
-            related: string; 
+            related: string;
         };
     };
     links: {
         self: string;
+    };
+}
+export interface MonthDateGroupedTransactions {
+    [monthKey: string]: {
+        monthDate: Date;
+        totalDebit: number;
+        dates: {
+            [dateKey: string]: {
+                date: Date;
+                transactions: TransformedTransaction[];
+                total: number;
+                isCredit: boolean;
+            };
+        };
+    };
+}
+
+export interface TransformedTransaction {
+    id: string;
+    accountId: string;
+    description: string;
+    amount: string;
+    date: string;
+    category: string;
+    status: string;
+    message: string;
+    biller: string;
+    bankLogo: string;
+    bankAltText: string;
+}
+
+export interface BankLogoConfig {
+    [instituteName: string]: {
+        logo: string;
+        altText: string;
     };
 }
