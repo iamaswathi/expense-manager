@@ -1,0 +1,29 @@
+{
+    "data": [
+      {
+        "id": "1234",
+        "name": "CommBank",
+        "last4digits": "2344",
+        "institution": "Comonwealth Bank of Australia",
+        "type": "savings"
+      },{
+        "id": "2342",
+        "name": "Bendigo",
+        "last4digits": "4099",
+        "institution": "Bendigo And Adelaide Bank",
+        "type": "savings"
+      },{
+        "id": "1176",
+        "name": "Up",
+        "last4digits": "9587",
+        "institution": "Up Bank",
+        "type": "savings"
+      },{
+        "id": "7786",
+        "name": "Nab",
+        "last4digits": "8977",
+        "institution": "National Australia Bank",
+        "type": "savings"
+      }
+    ]
+}

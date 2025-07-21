@@ -8,14 +8,14 @@ export default {
     },
       colors: {
         brand:{
-          sunset:' #ff705c',
+          bcolor:' #00A693',
         },
         primary: '#2B2D2E',
         secondary: '#747C7D',
         tertiary: '#45BA59',
-        highlight: '#F3F4F9',
+        highlight: '#F0FFF0',
       },
-    },
+    }
   },
   plugins: [],
 }

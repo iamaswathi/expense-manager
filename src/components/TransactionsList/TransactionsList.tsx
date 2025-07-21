@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { getCategoryIcon } from '../../utils/getCategoryIcons';
 import { groupByMonthAndDate } from '../../utils/groupByMonthAndDate';
 import { useAppSelector, useAppDispatch } from '../../state/hooks';
-import { loadAccounts, loadTransactions, setSelectedAccounts, setSelectedTransaction, setTransactions } from '../../state/transactions/transactionsSlice';
+import { loadAccounts, loadCategories, loadTransactions, setSelectedAccounts, setSelectedTransaction, setTransactions } from '../../state/transactions/transactionsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../state/store';
 import { fetchTransactionsList } from '../../services/dataService';
@@ -13,27 +13,90 @@ import AccountsList from '../AccountsList/AccountsList';
 export default function TransactionsList() {
 
     const dispatch = useAppDispatch();
-    const transactions = useAppSelector((state: RootState) => state.transctions.transactionsList);
-    const accounts = useAppSelector((state: RootState) => state.transctions.accounts);
-    const selectedAccountIds = useAppSelector((state: RootState) => state.transctions.selectedAccountIds);
-    const status = useAppSelector((state) => state.transctions.status);
+    // const transactions = useAppSelector((state: RootState) => state.transctions.transactionsList);
+    // const accounts = useAppSelector((state: RootState) => state.transctions.accounts);
+    // const categories = useAppSelector((state: RootState) => state.transctions.categories);
+    // const selectedAccountIds = useAppSelector((state: RootState) => state.transctions.selectedAccountIds);
+    // const status = useAppSelector((state) => state.transctions.status);
 
+    const { transactionsList, accounts, categories, selectedAccountIds, status } = useAppSelector((state: RootState) => state.transctions);
+    console.log('Categories in state:', categories);
+    console.log('Accounts in state:', accounts);
     useEffect(() => {
         const loadData = async () => {
             await dispatch(loadAccounts());
+            await dispatch(loadCategories());
             await dispatch(loadTransactions());
         };
         loadData();
+        console.log('Selected category changed:', selectedCategory);
     }, [dispatch]);
 
-    const displayTransactions = transactions.map(t => transformTransactions(t, accounts));
+    const [selectedCategory, setSelectedCategory] = useState<string>('All');
+    const displayTransactions = useMemo(() => {
+        return transactionsList.map(t => {
+            const transactionTag = t.relationships.tags?.data[0]?.id;
+            const category = categories.find(c =>
+                c.name.toLowerCase() === transactionTag?.toLowerCase()
+            );
+
+            return {
+                ...transformTransactions(t, accounts),
+                categoryId: category?.id || 'uncategorized',
+                categoryName: category?.name || transactionTag || 'Uncategorized'
+            };
+        });
+    }, [transactionsList, accounts, categories]);
+
+    const filteredTransactions = useMemo(() => {
+        return displayTransactions
+            .filter(t => selectedAccountIds.length === 0 ||
+                selectedAccountIds.includes(t.accountId))
+            .filter(t => {
+                return selectedCategory === 'All' ||
+                    t.categoryName.toLowerCase() === selectedCategory.toLowerCase();
+            });
+    }, [displayTransactions, selectedAccountIds, selectedCategory]);
+
+    // Category selection handler
+    const handleSelectCategory = (category: string) => {
+        console.log('Selecting category:', category); // Debug log
+        setSelectedCategory(category);
+    };
 
     if (status === 'loading') return <div>Loading ...</div>
 
-    const grouped = groupByMonthAndDate(displayTransactions);
+    const grouped = groupByMonthAndDate(filteredTransactions);
 
     return (
         <div className="font-custom">
+            {/* Category Filter */}
+            <div className="flex gap-2 overflow-x-auto pb-2">
+                <button
+                    onClick={() => handleSelectCategory('All')}
+                    className={`px-3 py-1 rounded-full ${selectedCategory === 'All'
+                        ? 'border-selected text-selected'
+                        : 'bg-gray-100'
+                        }`}
+                >
+                    All
+                </button>
+                {categories?.map(category => ( // Add optional chaining
+                    <button
+                        key={category.id}
+                        onClick={() => handleSelectCategory(category.name)}
+                        className={`px-3 py-1 rounded-full flex items-center ${selectedCategory === category.name
+                            ? 'border-selected text-selected'
+                            : 'bg-gray-100'
+                            }`}
+                    >
+                        <span className="mr-1">{getCategoryIcon(category.name)}</span>
+                        <span className="${selectedCategory === category.name
+                            ? 'text-selected'
+                            : 'text-primary'">{category.name}</span>
+                    </button>
+                ))}
+            </div>
             <AccountsList />
 
             {/* Display selected account badges */}
@@ -82,7 +145,7 @@ export default function TransactionsList() {
                                                 const amountFormatted = `${isCredit ? "+" : ""}$${amount}`;
 
                                                 return (
-                                                    <tr key={item.id} className="hover:bg-highlight" onClick={() => dispatch(setSelectedTransaction(item.id))}>
+                                                    <tr key={item.id} className="hover:border-[#F0FFF0]-4" onClick={() => dispatch(setSelectedTransaction(item.id))}>
                                                         <td className="text-primary border-none">
                                                             <div className="text-primary flex items-center justify-center h-full w-full">
                                                                 <img className="logo-style" src={item.bankLogo} alt={item.bankAltText} />

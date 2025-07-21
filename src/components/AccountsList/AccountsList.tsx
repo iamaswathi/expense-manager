@@ -18,7 +18,7 @@ export default function AccountsList() {
     };
 
     return (
-        <div className="relative">
+        <div className="font-custom relative w-48">
             <button onClick={() => setIsOpen(!isOpen)}
                 className="p-2 border rounded flex items-center justify-between w-full">
                 {selectedAccountIds.length > 0 ? `${selectedAccountIds.length} selected` : 'Select Accounts'}
@@ -37,11 +37,11 @@ export default function AccountsList() {
                                     className="mr-2"
                                 />
                                 <div>
-                                    <p className="font-medium flex">
+                                    <p className="text-primary flex">
                                         <span className="px-4"><img className="logo-style" src={account.bankLogo} alt={account.bankAltText} /></span>
                                         <span> {account.name}</span>
                                     </p>
-                                    <p className="text-sm text-gray-500">{account.institution} .....{account.last4digits}</p>
+                                    <p className="text-sm text-gray-500">.....{account.last4digits}</p>
                                 </div>
                             </div>
                         </div>

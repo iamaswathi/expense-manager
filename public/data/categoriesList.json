@@ -1,0 +1,44 @@
+{
+    "data": [
+        {
+            "id": "11",
+            "name": "Salary"
+        },
+        {
+            "id": "12",
+            "name": "Food"
+        },
+        {
+            "id": "13",
+            "name": "Entertainment"
+        },
+        {
+            "id": "14",
+            "name": "Rent"
+        },
+        {
+            "id": "15",
+            "name": "Grocery"
+        },
+        {
+            "id": "16",
+            "name": "Shopping"
+        },
+        {
+            "id": "17",
+            "name": "Utility"
+        },
+        {
+            "id": "18",
+            "name": "Transport"
+        },
+        {
+            "id": "19",
+            "name": "Health"
+        },
+        {
+            "id": "20",
+            "name": "Savings"
+        }
+    ]
+}

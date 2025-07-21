@@ -7,4 +7,7 @@ export default defineConfig({
   css: {
     postcss : './postcss.config.cjs',
   },
+  esbuild: {
+    target: 'es2015'
+  }
 });

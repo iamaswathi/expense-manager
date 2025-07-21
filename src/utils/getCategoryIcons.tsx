@@ -9,6 +9,7 @@ import {
     HelpCircle,
     Drama,
     ShoppingBasket,
+    UtilityPole,
   } from 'lucide-react';
 
   export const getCategoryIcon = (category: string) => {
@@ -31,6 +32,8 @@ import {
             return <PiggyBank/>;
         case 'health': 
             return <Heart/>;
+        case 'utility':
+            return <UtilityPole/>;
         default:
             return <HelpCircle/>;
     }

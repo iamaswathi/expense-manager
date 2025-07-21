@@ -30,3 +30,12 @@
     padding-top:20px;
     display:inline-block;
   }
+  .border-selected {
+    border: 1px solid #00A693;
+  }
+  .text-selected {
+    color: #00A693;
+  }
+  .highlight {
+    background-color: #E0FFFF;
+  }

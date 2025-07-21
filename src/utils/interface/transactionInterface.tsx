@@ -16,6 +16,11 @@ export interface Account {
     bankAltText?: string;
 }
 
+export interface Category {
+    id: string;
+    name: string;
+}
+
 export interface Transaction {
     type: string;
     id: string;

@@ -1,13 +1,15 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TransactionsState } from "../../utils/interface/transactionState";
-import { fetchAccountsList, fetchTransactionsList } from "../../services/dataService";
+import { fetchAccountsList, fetchCategoriesList, fetchTransactionsList } from "../../services/dataService";
 import { Account, Transaction } from "../../utils/interface/transactionInterface";
 import { RootState } from "../store";
 import { transformAccounts } from "../../utils/utilities";
 
 const initialState: TransactionsState = {
     accounts: [],
+    categories: [],
     selectedAccountIds: [],
+    selectedCategoryId: null,
     transactionsList: [],
     selectedTransactionId: null,
     status: 'idle',
@@ -19,6 +21,13 @@ export const loadAccounts = createAsyncThunk(
     async () => {
         const data = await fetchAccountsList();
         return transformAccounts(data);
+    }
+);
+export const loadCategories = createAsyncThunk(
+    'transactions/loadCategories',
+    async () => {
+        const data = await fetchCategoriesList();
+        return data;
     }
 );
 export const loadTransactions = createAsyncThunk(
@@ -36,6 +45,9 @@ const transactionSlice = createSlice({
     reducers: {
         setSelectedAccounts(state, action: PayloadAction<string[]>) {
             state.selectedAccountIds = action.payload;
+        },
+        setSelectedCategory(state, action: PayloadAction<string>) {
+            state.selectedCategoryId = action.payload;
         },
         setTransactions(state, action: PayloadAction<Transaction[]>) {
             state.transactionsList = action.payload;
@@ -61,9 +73,14 @@ const transactionSlice = createSlice({
             })
             .addCase(loadAccounts.fulfilled, (state, action) => {
                 state.accounts = action.payload;
+            })
+            .addCase(loadCategories.fulfilled, (state, action) => {
+                state.categories = action.payload;
             });
     }
 });
 
-export const { setSelectedAccounts, setTransactions, setSelectedTransaction, clearSelectedTransaction } = transactionSlice.actions;
+export const { setSelectedAccounts, setSelectedCategory,
+    setTransactions, setSelectedTransaction,
+    clearSelectedTransaction } = transactionSlice.actions;
 export default transactionSlice.reducer;
