@@ -3,22 +3,15 @@ import { getCategoryIcon } from '../../utils/getCategoryIcons';
 import { groupByMonthAndDate } from '../../utils/groupByMonthAndDate';
 import { useAppSelector, useAppDispatch } from '../../state/hooks';
 import { loadAccounts, loadCategories, loadTransactions, setSelectedAccounts, setSelectedTransaction, setTransactions } from '../../state/transactions/transactionsSlice';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../state/store';
-import { fetchTransactionsList } from '../../services/dataService';
+import { RootState } from '../../state/store';
 import TransactionDetail from '../TransactionDetail/TransactionDetail';
-import { findIfCredit, getTimeFromDateString, removeCreditDebitSign, transformTransactions } from '../../utils/utilities';
+import { getTimeFromDateString, transformTransactions } from '../../utils/utilities';
 import AccountsList from '../AccountsList/AccountsList';
+import { FinancialDashboard } from '../FinancialDashboard/FinancialDashboard';
 
 export default function TransactionsList() {
 
     const dispatch = useAppDispatch();
-    // const transactions = useAppSelector((state: RootState) => state.transctions.transactionsList);
-    // const accounts = useAppSelector((state: RootState) => state.transctions.accounts);
-    // const categories = useAppSelector((state: RootState) => state.transctions.categories);
-    // const selectedAccountIds = useAppSelector((state: RootState) => state.transctions.selectedAccountIds);
-    // const status = useAppSelector((state) => state.transctions.status);
-
     const { transactionsList, accounts, categories, selectedAccountIds, status } = useAppSelector((state: RootState) => state.transctions);
     console.log('Categories in state:', categories);
     console.log('Accounts in state:', accounts);
@@ -64,12 +57,13 @@ export default function TransactionsList() {
         setSelectedCategory(category);
     };
 
-    if (status === 'loading') return <div>Loading ...</div>
+    if (status === 'loading') return <div className="p-4 max-w-4xl mx-auto font-custom">Loading ...</div>
 
     const grouped = groupByMonthAndDate(filteredTransactions);
 
     return (
-        <div className="font-custom">
+        <div className="p-4 max-w-4xl mx-auto font-custom">
+            <FinancialDashboard transactions={filteredTransactions} />
             {/* Category Filter */}
             <div className="flex gap-2 overflow-x-auto pb-2">
                 <button
@@ -128,7 +122,7 @@ export default function TransactionsList() {
 
                         {Object.entries(dates)
                             .sort((a, b) => b[1].date.getTime() - a[1].date.getTime())
-                            .map(([dateKey, { transactions, total, isCredit }]) => (
+                            .map(([dateKey, { transactions, total, }]) => (
                                 <div key={dateKey} className="border-none">
                                     <div className="flex justify-between items-center border-none bg-highlight px-4 py-2">
                                         <p className="text-xs text-secondary">{dateKey}</p>
@@ -139,13 +133,11 @@ export default function TransactionsList() {
                                         <tbody>
                                             {transactions.map((item, index) => {
                                                 const isLastRow = index === transactions.length - 1;
-                                                const amount = parseFloat(removeCreditDebitSign(item.amount)).toFixed(2);
-                                                const isCredit = findIfCredit(item.amount);
-                                                const amountColor = isCredit ? "text-tertiary" : "text-primary";
-                                                const amountFormatted = `${isCredit ? "+" : ""}$${amount}`;
+                                                const amountColor = (item.type.toLowerCase() === 'credit') ? "text-tertiary" : "text-primary";
+                                                const amountFormatted = `${(item.type.toLowerCase() === 'credit')  ? "+" : ""}$${item.amount}`;
 
                                                 return (
-                                                    <tr key={item.id} className="hover:border-[#F0FFF0]-4" onClick={() => dispatch(setSelectedTransaction(item.id))}>
+                                                    <tr key={item.id} className="hover:bg-hightlight" onClick={() => dispatch(setSelectedTransaction(item.id))}>
                                                         <td className="text-primary border-none">
                                                             <div className="text-primary flex items-center justify-center h-full w-full">
                                                                 <img className="logo-style" src={item.bankLogo} alt={item.bankAltText} />

@@ -160,7 +160,6 @@ export interface MonthDateGroupedTransactions {
                 date: Date;
                 transactions: TransformedTransaction[];
                 total: number;
-                isCredit: boolean;
             };
         };
     };
@@ -170,7 +169,8 @@ export interface TransformedTransaction {
     id: string;
     accountId: string;
     description: string;
-    amount: string;
+    amount: number;
+    type: string;
     date: string;
     category: string;
     status: string;

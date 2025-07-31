@@ -8,7 +8,7 @@ export default function App() {
   return (
     <div>
       <Header />
-      <AccountBalance available={1299.38} spendable={650.44}/>
+      {/* <AccountBalance available={1299.38} spendable={650.44}/> */}
       <Router>
         <Routes>
           <Route path="/" element={<TransactionsList />} />
