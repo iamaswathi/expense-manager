@@ -1,6 +1,6 @@
 import { useAppSelector, useAppDispatch } from '../../state/hooks';
 import { getCategoryIcon } from '../../utils/getCategoryIcons';
-import { getTimeFromDateString, transformTransactions } from '../../utils/utilities';
+import { getFullDate, getTimeFromDateString, transformTransactions } from '../../utils/utilities';
 import { clearSelectedTransaction } from '../../state/transactions/transactionsSlice';
 
 export default function TransactionDetail() {
@@ -63,10 +63,7 @@ export default function TransactionDetail() {
                                 src={transaction.bankLogo}
                                 alt={transaction.bankAltText}
                             />
-                            <span className="text-sm text-primary">
-                                {/* {accounts.find((a: { id: string; }) => a.id === transaction.accountId)?.name} */}
-                                {getAccountDetails()}
-                            </span>
+                            <span className="text-sm text-primary">{getAccountDetails()}</span>
                         </div>
                     </div>
 
@@ -80,11 +77,7 @@ export default function TransactionDetail() {
                     <div className="flex justify-between">
                         <span className="text-sm text-secondary">Date</span>
                         <span className="text-sm text-primary">
-                            {new Date(transaction.date).toLocaleDateString('en-US', {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric'
-                            })}
+                            {getFullDate(transaction.date)}
                         </span>
                     </div>
 

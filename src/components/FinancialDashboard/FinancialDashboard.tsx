@@ -2,6 +2,7 @@ import { Doughnut } from 'react-chartjs-2'; // Easier than raw Chart.js
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { useMemo } from 'react';
 import { TransformedTransaction } from '../../utils/interface/transactionInterface';
+import { getFullDate } from '../../utils/utilities';
 
 // Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -15,55 +16,58 @@ export const FinancialDashboard = ({ transactions }: FinancialDashboardProps) =>
     const { chartData, summary } = useMemo(() => {
         const categoryMap = new Map();
         let totalExpenses = 0;
-        const dayCount = new Map();
-        
-        // Initialize all days with 0 counts
-        const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        daysOfWeek.forEach(day => dayCount.set(day, 0));
-      
-        transactions.forEach(txn => {
-           if(txn.type.toLowerCase() === 'debit') {
-          totalExpenses += txn.amount;
-          } else {
-            totalExpenses += 0;
-          }
+        const dateSpendingMap = new Map<string, number>();
 
-        
-          // Category breakdown
-          const category = txn.category || 'Other';
-          categoryMap.set(category, (categoryMap.get(category) || 0) + txn.amount);
-          
-          // Day of week analysis
-          const day = new Date(txn.date).toLocaleString('en-US', { weekday: 'long' });
-          dayCount.set(day, (dayCount.get(day) || 0) + 1);
+        transactions.forEach(txn => {
+            if (txn.type.toLowerCase() === 'debit') {
+                totalExpenses += txn.amount;
+                // Track spending by date (YYYY-MM-DD format)
+                const dateKey = new Date(txn.date).toISOString().split('T')[0];
+                dateSpendingMap.set(dateKey, (dateSpendingMap.get(dateKey) || 0) + txn.amount);
+            } else {
+                totalExpenses += 0;
+            }
+
+
+            // Category breakdown
+            const category = txn.category || 'Other';
+            categoryMap.set(category, (categoryMap.get(category) || 0) + txn.amount);
         });
-      
-        // Safely find busiest day (won't throw on empty array)
-        const busiestDayEntry = [...dayCount.entries()].reduce(
-          (a, b) => a[1] > b[1] ? a : b,
-          ['None', 0] // Initial value
-        );
-        
+
+        // Find date with highest spending
+        let maxSpendDate = { date: 'N/A', amount: 0 };
+        dateSpendingMap.forEach((amount, date) => {
+            if (amount > maxSpendDate.amount) {
+                maxSpendDate = { date, amount };
+            }
+        });
+
+        // Format the date for display (e.g., "Jan 1, 2023")
+        const formattedDate = maxSpendDate.date !== 'N/A'
+            ? getFullDate(maxSpendDate.date)
+            : 'N/A';
+
         return {
-          chartData: {
-            labels: [...categoryMap.keys()],
-            datasets: [{
-              data: [...categoryMap.values()],
-              backgroundColor: [
-                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
-                '#9966FF', '#FF9F40', '#8AC24A'
-              ],
-              borderWidth: 0
-            }]
-          },
-          summary: {
-            totalExpenses,
-            averageExpenses: transactions.length ? totalExpenses / transactions.length : 0,
-            busiestDay: busiestDayEntry[0],
-            transactionCount: transactions.length
-          }
+            chartData: {
+                labels: [...categoryMap.keys()],
+                datasets: [{
+                    data: [...categoryMap.values()],
+                    backgroundColor: [
+                        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
+                        '#9966FF', '#FF9F40', '#8AC24A'
+                    ],
+                    borderWidth: 0
+                }]
+            },
+            summary: {
+                totalExpenses,
+                averageExpenses: transactions.length ? totalExpenses / transactions.length : 0,
+                highestSpendingDate: formattedDate,
+                highestSpendingAmount: maxSpendDate.amount,
+                transactionCount: transactions.length
+            }
         };
-      }, [transactions]);
+    }, [transactions]);
 
     return (
         <div className="p-4 max-w-4xl mx-auto">
@@ -80,8 +84,10 @@ export const FinancialDashboard = ({ transactions }: FinancialDashboardProps) =>
                 </div>
 
                 <div className="bg-white p-4 rounded-lg shadow">
-                    <p className="text-gray-500 text-sm">Busiest day</p>
-                    <p className="text-2xl font-bold">{summary.busiestDay}</p>
+
+                    <p className="text-gray-500 text-sm">Most spent on</p>
+                    <p className="text-2xl font-bold">{summary.highestSpendingDate}</p>
+                    <p className="text-sm text-gray-500">${summary.highestSpendingAmount.toFixed(2)}</p>
                 </div>
             </div>
 
