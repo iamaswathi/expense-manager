@@ -1,90 +1,121 @@
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../state/store";
-import { clearSelectedTransaction } from "../../state/transactions/transactionsSlice";
-import { getCategoryIcon } from "../../utils/getCategoryIcons";
-import { findIfCredit, getDateDay, getTimeFromDateString, removeCreditDebitSign } from "../../utils/utilities";
+import { useAppSelector, useAppDispatch } from '../../state/hooks';
+import { getCategoryIcon } from '../../utils/getCategoryIcons';
+import { getTimeFromDateString, transformTransactions } from '../../utils/utilities';
+import { clearSelectedTransaction } from '../../state/transactions/transactionsSlice';
 
-const TransactionDetail = () => {
-    const { transactionsList, selectedTransactionId } = useSelector((state: RootState) => state.transctions);
-    const transaction = transactionsList.find(tx => tx.id === selectedTransactionId);
-    const dispatch = useDispatch();
+export default function TransactionDetail() {
+    const dispatch = useAppDispatch();
+    const { selectedTransactionId, transactionsList, accounts, categories } = useAppSelector((state) => state.transctions);
+    const selectedTransaction = transactionsList.find((tx: { id: string; }) => tx.id === selectedTransactionId);
+    const transaction = selectedTransaction
+        ? transformTransactions(selectedTransaction, accounts)
+        : null;
 
+    if (!transaction) return null;
 
-    if (!transaction) {
-        return null;
+    const categoryName = categories.find((c: { name: string; }) =>
+        c.name.toLowerCase() === transaction.category.toLowerCase()
+    )?.name || transaction.category;
+
+    const getAccountDetails = () => {
+        const acc = accounts.find((a: { id: string; }) => a.id === transaction.accountId);
+        return acc?.name + ' - ' + acc?.last4digits;
     }
 
-    const {
-        description,
-        message,
-        createdAt,
-        amount,
-        transactionType,
-    } = transaction.attributes;
-    const txnAmount = parseFloat(removeCreditDebitSign(amount.value)).toFixed(2);
-    const amountFormatted = `${amount.value.startsWith('+') ? "+" : ""}$${txnAmount}`;
-    const isCredit = findIfCredit(transaction.attributes.amount.value);
-    const amountColor = isCredit ? "text-tertiary" : "text-primary";
+    const amountColor = transaction.type.toLowerCase() === 'credit'
+        ? 'text-tertiary'
+        : 'text-primary';
+    const amountFormatted = `${transaction.type.toLowerCase() === 'credit' ? '+' : ''}$${transaction.amount.toFixed(2)}`;
 
+    const handleClose = () => {
+        dispatch(clearSelectedTransaction());
+    };
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-            <div className="bg-white border rounded shadow-md px-2 py-2 w-96 relative font-sans">
-                <button
-                    className="absolute top-1 right-2 text-gray-500 text-lg"
-                    onClick={() => dispatch(clearSelectedTransaction())}
-                >
-                    ×
-                </button>
-
-                <div className="border-b px-4 py-4 flex justify-between">
-                    <div className="flex justify-between">
-                        <div>{getCategoryIcon(transaction.relationships.tags.data[0].id)}</div>
-                        <div className="px-4"><div className="font-semibold text-sm">{description || 'Merchant Name'}</div>
-                        <div className="text-xs">{message || 'Description or note'}</div></div>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-lg p-6 max-w-md w-full">
+                <div className="flex justify-between items-start mb-6">
+                    <div className="flex items-center gap-4">
+                        <div className="p-3 rounded-full bg-gray-100">
+                            {getCategoryIcon(categoryName)}
+                        </div>
+                        <div>
+                            <h2 className="text-lg font-medium text-primary">
+                                {transaction.description}
+                            </h2>
+                            <p className="text-sm text-secondary">
+                                {getTimeFromDateString(transaction.date)}
+                                {/* {transaction.message && ` • ${transaction.message}`} */}
+                            </p>
+                        </div>
                     </div>
-                    <div className={`text-sm font-bold ${amountColor} `}>{amountFormatted}</div>
+                    <span className={`text-lg font-medium ${amountColor}`}>
+                        {amountFormatted}
+                    </span>
                 </div>
 
-                <table className="w-full text-sm">
-                    <tbody>
-                        <tr className="border-none">
-                            <td className="px-4 py-2 text-left text-gray-600">{isCredit ? 'Received' : 'Paid'}</td>
-                            <td className="px-4 py-2 text-right">
-                                {getDateDay(createdAt)} {getTimeFromDateString(createdAt)}
-                            </td>
-                        </tr>
-                        <tr className="border-none">
-                            <td className="px-4 py-2 text-left text-gray-600">Payment method</td>
-                            <td className="px-4 py-2 text-right">Direct credit</td>
-                        </tr>
-                        <tr className="border-b">
-                            <td className="px-4 py-2 text-left text-gray-600">Payment ID</td>
-                            <td className="px-4 py-2 text-right">sbjdhfkjshkjfh</td>
-                        </tr>
+                <div className="space-y-4">
+                    <div className="flex justify-between">
+                        <span className="text-sm text-secondary">Account</span>
+                        <div className="flex items-center gap-2">
+                            <img
+                                className="w-6 h-6"
+                                src={transaction.bankLogo}
+                                alt={transaction.bankAltText}
+                            />
+                            <span className="text-sm text-primary">
+                                {/* {accounts.find((a: { id: string; }) => a.id === transaction.accountId)?.name} */}
+                                {getAccountDetails()}
+                            </span>
+                        </div>
+                    </div>
 
-                        {/* Add Category */}
-                        <tr className="border-b cursor-pointer hover:bg-gray-50">
-                            <td className="px-4 py-2 text-blue-500 font-medium flex items-center">
-                                <span className="mr-2">+</span> ADD category
-                            </td>
-                            <td className="px-4 py-2 text-right text-gray-500">&gt;</td>
-                        </tr>
+                    <div className="flex justify-between">
+                        <span className="text-sm text-secondary">Category</span>
+                        <span className="text-sm text-primary">
+                            {categoryName}
+                        </span>
+                    </div>
 
-                        {/* Add Tag */}
-                        <tr className="cursor-pointer hover:bg-gray-50">
-                            <td className="px-4 py-2 text-blue-500 font-medium flex items-center">
-                                <span className="mr-2">+</span> ADD Tag
-                            </td>
-                            <td className="px-4 py-2 text-right text-gray-500">&gt;</td>
-                        </tr>
-                    </tbody>
-                </table>
+                    <div className="flex justify-between">
+                        <span className="text-sm text-secondary">Date</span>
+                        <span className="text-sm text-primary">
+                            {new Date(transaction.date).toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            })}
+                        </span>
+                    </div>
+
+                    {transaction.status && (
+                        <div className="flex justify-between">
+                            <span className="text-sm text-secondary">Status</span>
+                            <span className="text-sm text-primary">
+                                {transaction.status}
+                            </span>
+                        </div>
+                    )}
+
+                    {transaction.biller && (
+                        <div className="flex justify-between">
+                            <span className="text-sm text-secondary">Biller</span>
+                            <span className="text-sm text-primary">
+                                {transaction.biller}
+                            </span>
+                        </div>
+                    )}
+                </div>
+
+                <div className="mt-6 flex justify-end gap-3">
+                    <button
+                        className="px-4 py-2 bg-primary rounded-md text-sm text-white"
+                        onClick={handleClose}
+                    >
+                        Close
+                    </button>
+                </div>
             </div>
         </div>
-    )
-
-};
-
-export default TransactionDetail;
-
+    );
+}
