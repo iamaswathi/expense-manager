@@ -22,9 +22,11 @@ export const FinancialDashboard = ({ transactions }: FinancialDashboardProps) =>
         daysOfWeek.forEach(day => dayCount.set(day, 0));
       
         transactions.forEach(txn => {
-        //    if(!isCredit) {
+           if(txn.type.toLowerCase() === 'debit') {
           totalExpenses += txn.amount;
-        //   } 
+          } else {
+            totalExpenses += 0;
+          }
 
         
           // Category breakdown
